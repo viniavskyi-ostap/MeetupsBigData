@@ -1,0 +1,4 @@
+# Cassandra
+CASSANDRA_HOSTS: ['localhost']
+CASSANDRA_USER: cassandra
+CASSANDRA_PASSWORD: cassandra
