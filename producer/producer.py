@@ -2,7 +2,7 @@ import json
 import requests
 import kafka
 
-BOOTSTRAP_SERVERS = ["172.31.42.74:9092", "172.31.45.18:9092", "172.31.43.240:9092"]
+BOOTSTRAP_SERVERS = ["localhost:9092"]
 URL = "http://stream.meetup.com/2/rsvps"
 TOPIC_NAME = "meetups"
 

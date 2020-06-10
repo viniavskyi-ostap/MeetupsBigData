@@ -2,7 +2,7 @@ from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
 
 from datetime import datetime
-from schema import schema
+from processing.schema import schema
 
 
 def write_to_cassandra(streaming_df, keyspace, table, trigger_time):
