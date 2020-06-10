@@ -5,6 +5,9 @@ from datetime import datetime
 from processing.schema import schema
 
 
+BOOTSTRAP_SERVERS = "172.31.65.164:9092,172.31.67.180:9092,172.31.67.236:9092"
+
+
 def write_to_cassandra(streaming_df, keyspace, table, trigger_time):
     query = (streaming_df.
              writeStream.
@@ -22,11 +25,14 @@ spark = SparkSession.builder \
     .getOrCreate()
 
 spark.conf.set("spark.sql.streaming.checkpointLocation", '.')
+spark.conf.set("spark.cassandra.auth.username", "cassandra")
+spark.conf.set("spark.cassandra.auth.password", "cassandra")
+
 
 df = (spark.
       readStream.
       format("kafka").
-      option("kafka.bootstrap.servers", "localhost:9092").
+      option("kafka.bootstrap.servers", BOOTSTRAP_SERVERS).
       option("subscribe", "meetups").
       option("startingOffsets", "earliest").
       load())
@@ -72,15 +78,10 @@ df4 = (df.
     F.col('group.group_city').alias('city'),
 ))
 
-q1 = write_to_cassandra(df1, keyspace='meetups', table='event_cities', trigger_time='1 minute')
-q2 = write_to_cassandra(df2, keyspace='meetups', table='events', trigger_time='1 minute')
-q3 = write_to_cassandra(df3, keyspace='meetups', table='cities_groups', trigger_time='1 minute')
-q4 = write_to_cassandra(df4, keyspace='meetups', table='groups_events', trigger_time='1 minute')
-
-q1.start()
-q2.start()
-q3.start()
-q4.start()
+q1 = write_to_cassandra(df1, keyspace='meetups', table='event_cities', trigger_time='1 minute').start()
+q2 = write_to_cassandra(df2, keyspace='meetups', table='events', trigger_time='1 minute').start()
+q3 = write_to_cassandra(df3, keyspace='meetups', table='cities_groups', trigger_time='1 minute').start()
+q4 = write_to_cassandra(df4, keyspace='meetups', table='groups_events', trigger_time='1 minute').start()
 
 q1.awaitTermination()
 q2.awaitTermination()

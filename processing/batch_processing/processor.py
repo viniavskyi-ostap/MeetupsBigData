@@ -9,8 +9,8 @@ from pyspark.sql import Window
 from processing.schema import schema
 
 
-BOOTSTRAP_SERVERS = "localhost:9092"
-STATES_PATH = "/home/andriiprysiazhnyk/Documents/ucu/big_data/project/data/USstate.json"
+BOOTSTRAP_SERVERS = "172.31.65.164:9092,172.31.67.180:9092,172.31.67.236:9092"
+STATES_PATH = "/home/ubuntu/data/USstate.json"
 
 
 def get_topics(arr):

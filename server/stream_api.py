@@ -36,7 +36,7 @@ def get_cities_by_coutry(country_code):
 def get_event_by_id(event_id):
     names = ['event_name', 'event_time', 'topics', 'group_name', 'country', 'city']
     session = cluster.connect()
-    row = next(iter(session.execute('select * from meetups.events where event_id = %s', (event_id,))), None)
+    row = next(iter(session.execute("select * from meetups.events where event_id = %s", (str(event_id),))), None)
 
     if row is None:
         abort(404)
@@ -62,7 +62,7 @@ def get_groups_by_city(city_name):
     return jsonify(res)
 
 
-@stream_route.route('/events/<int:group_id>')
+@stream_route.route('/events_by_group/<int:group_id>')
 def get_event_by_group(group_id):
     names = ['event_name', 'event_time', 'topics', 'group_name', 'country', 'city']
     session = cluster.connect()
